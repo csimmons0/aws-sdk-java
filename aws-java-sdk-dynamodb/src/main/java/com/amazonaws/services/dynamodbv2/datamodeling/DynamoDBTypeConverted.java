@@ -85,10 +85,6 @@ import java.lang.annotation.Target;
  * public Currency getCurrency() { return currency; }
  * </pre>
  *
- * <p>All converters are null-safe, a {@code null} value will never be passed
- * to {@link DynamoDBTypeConverter#convert}
- * or {@link DynamoDBTypeConverter#unconvert}.</p>
- *
  * <p>Precedence for selecting a type-converter first goes to getter annotations,
  * then field, then finally type.</p>
  *

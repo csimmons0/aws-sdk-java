@@ -35,6 +35,14 @@ public interface DynamoDBTypeConverter<S extends Object, T extends Object> {
     T unconvert(S object);
 
     /**
+     * Whether null values should be passed to this converter.
+     * @return Whether null values should be passed to this converter.
+     */
+    default boolean passNull() {
+        return false;
+    }
+
+    /**
      * An abstract converter with additional general purpose functions.
      */
     @SdkInternalApi
@@ -51,7 +59,10 @@ public interface DynamoDBTypeConverter<S extends Object, T extends Object> {
             AbstractConverter<S,U> converter = (AbstractConverter<S,U>)nullSafe();
             for (DynamoDBTypeConverter<T,U> target : targets) {
                 if (target != null) {
-                    converter = converter.join((DynamoDBTypeConverter<U,U>)nullSafe(target));
+                    if (!target.passNull()) {
+                        target = nullSafe(target);
+                    }
+                    converter = converter.join((DynamoDBTypeConverter<U,U>)target);
                 }
             }
             return converter;
